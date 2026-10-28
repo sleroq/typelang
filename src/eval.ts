@@ -14,7 +14,10 @@ import type { And, Dec, Equals, Inc, Join, Or } from './builtInFunctions';
 import type { Reverse, Tail, Unshift } from './utils/arrayUtils';
 import type { Cast, MergeWithOverride } from './utils/generalUtils';
 
-type State = Record<string, any>;
+type State = Record<
+  string,
+  string | boolean | null | FunctionState<Array<Expression>, Expression>
+>;
 
 type EvalExpression<
   S extends State,
@@ -121,7 +124,7 @@ type FunctionState<A extends Array<Expression>, B extends Expression> = {
 type CreateFunctionApplicationScope<
   G extends Array<any>,
   A extends Array<Expression>,
-  R extends Record<string, any>
+  R extends State
 > = A extends []
   ? R
   : A[0] extends VariableExpression<infer V>

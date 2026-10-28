@@ -53,10 +53,13 @@ type TokenizeSymbol<
 
 export type TokenizeSequence<
   I extends string,
-  R extends Array<Token<any>> = [],
-  P extends [any, string] = TokenizeInput<I>
+  R extends Array<Token<any>> = []
 > = I extends ''
   ? R
-  : TokenizeSequence<P[1], P[0] extends '' ? R : Unshift<R, P[0]>>;
+  : TokenizeInput<I> extends infer P
+  ? P extends [any, string]
+    ? TokenizeSequence<P[1], P[0] extends '' ? R : Unshift<R, P[0]>>
+    : never
+  : never;
 
 export type Tokenize<I extends string> = Reverse<TokenizeSequence<I>>;
